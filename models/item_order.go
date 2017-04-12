@@ -1,11 +1,17 @@
 package models
 
+import (
+	"time"
+)
+
 // ItemOrder ...
 type ItemOrder struct {
-	ID             int
-	ItemID         int
-	BillID         int
+	ID     uint
+	BillID uint
+
+	Items []Item
+
 	Quantity       int
 	OrderPrice     int
-	OrderTimeStamp int
+	OrderTimeStamp time.Time
 }

@@ -2,8 +2,9 @@ package models
 
 // Membership ...
 type Membership struct {
-	ID             int
-	MembershipType int
+	CustomerID uint
+
+	MembershipType uint `gorm:"primary_key:true"`
 	Discount       float64
 	Description    string
 }

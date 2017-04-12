@@ -1,11 +1,15 @@
 package models
 
-// Items ...
-type Items struct {
-	ID          int
+// Item ...
+type Item struct {
+	ID          uint
+	ItemOrderID uint
+
+	ItemCategory   ItemCategory
+	ItemCategoryID uint
+
 	Name        string
 	UnitPrice   int
-	CategoryID  int
 	ItemPhoto   string
 	Description string
 }

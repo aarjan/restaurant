@@ -2,6 +2,6 @@ package models
 
 // ItemCategory ...
 type ItemCategory struct {
-	ID   int
+	ID   uint
 	Name string
 }

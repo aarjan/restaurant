@@ -2,12 +2,15 @@ package models
 
 // Customer ...
 type Customer struct {
+	ID          uint
+	Bills       []Bill
+	Memberships []Membership
+
 	FirstName string
 	LastName  string
 	Phone     int
 	Address   string
-	Gender    bool
+	Gender    string
 	Age       int
-	MemberID  int
 	Email     string
 }

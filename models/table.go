@@ -2,8 +2,7 @@ package models
 
 // Table ...
 type Table struct {
-	ID       int
-	TableNo  int
+	TableNo  uint `gorm:"primary_key:true"`
 	Capacity int
-	Status   int
+	Status   bool
 }

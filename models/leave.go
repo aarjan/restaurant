@@ -2,7 +2,8 @@ package models
 
 // Leave ...
 type Leave struct {
-	EmployeeID  int
-	Date        string
-	LeaveStatus bool
+	ID         uint
+	EmployeeID uint
+	Date       string
+	Status     bool
 }

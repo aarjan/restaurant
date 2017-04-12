@@ -1,7 +1,8 @@
 package models
 
-// ServiceCharge ...
-type ServiceCharge struct {
-	ID           int
-	ServiceValue int
+// ServiceCh ...
+type ServiceCh struct {
+	ID           uint
+	BillID       uint
+	ServiceValue float64
 }
