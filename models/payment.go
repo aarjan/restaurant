@@ -5,6 +5,5 @@ type Payment struct {
 	ID     uint
 	BillID uint
 
-	PaymentType string
-	Description string
+	PaymentType string `sql:"unique"`
 }

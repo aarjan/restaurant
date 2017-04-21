@@ -20,101 +20,96 @@ func main() {
 	}
 	defer db.Close()
 
+	membership := models.Membership{
+		// get CustomerID
+		MembershipType: "Exclusive",
+		Discount:       0.2,
+		Description:    "Full featured access",
+	}
+
 	customer1 := models.Customer{
-		FirstName: "Aarjan",
-		LastName:  "Baskota",
-		Address:   "Balkot",
-		Email:     "baskotaaarjan@gmail.com",
-		Phone:     9849321326,
-		Gender:    "Male",
+		FirstName:     "Aarjan",
+		LastName:      "Baskota",
+		Address:       "Balkot",
+		Age:           23,
+		Email:         "baskotaaarjan@gmail.com",
+		ContactNumber: "9849321326",
+		Memberships:   []models.Membership{membership},
+		Gender:        "Male",
 	}
 
 	itemCategory1 := models.ItemCategory{
-		ID:   777,
 		Name: "Snacks",
 	}
 	itemCategory2 := models.ItemCategory{
-		ID:   737,
 		Name: "Soop",
 	}
 
 	item1 := models.Item{
-		Name:           "Sandwitch",
-		Description:    "Cheese and Grilled",
-		ItemCategoryID: itemCategory1.ID,
+		Name:         "Sandwitch",
+		Description:  "Cheese and Grilled",
+		ItemCategory: itemCategory1,
+		UnitPrice:    12.233,
 	}
 
 	item2 := models.Item{
-		ID:             0x000002,
-		Name:           "Veg Soop",
-		Description:    "With Cheese and Honey",
-		ItemCategoryID: itemCategory2.ID,
+		Name:         "Veg Soop",
+		Description:  "With Cheese and Honey",
+		ItemCategory: itemCategory2,
+		UnitPrice:    34.23,
 	}
 
 	itemOrder := models.ItemOrder{
 		Items:          []models.Item{item1, item2},
 		Quantity:       3,
+		OrderPrice:     234.2,
 		OrderTimeStamp: time.Now(),
 	}
 
-	membership := models.Membership{
-		// get CustomerID
-		MembershipType: 2222,
-		Discount:       0.2,
-		Description:    "Exclusive",
-	}
 	serviceCh := models.ServiceCh{
-		ID:           001,
-		ServiceValue: 23.23,
+		Value: 23.23,
+		Name:  "Service charge",
 	}
 	table1 := models.Table{
-		TableNo:  004,
+		Alias:    "Table 004",
 		Capacity: 6,
-		Status:   true,
+		Status:   models.Ordered,
 	}
 
 	payment := models.Payment{
-		ID:          0,
-		PaymentType: "DebitCard",
-		Description: "Visa",
+		PaymentType: "Visa DebitCard",
 	}
 
 	position := models.Position{
-		ID:          0,
-		EmployeeID:  0123,
 		Name:        "Cook",
 		Description: "2nd Standard",
 	}
 
 	employee1 := models.Employee{
-		ID:        0123,
-		FirstName: "Ram",
-		LastName:  "Thapa",
-		Address:   "Dillibazar",
-		DOB:       "1992-3-23",
-		Email:     "",
-		Gender:    "Male",
-		Phone:     9832899483,
-		Photo:     "",
-		JoinDate:  "2073-4-31",
-		Salary:    23000,
+		FirstName:     "Ram",
+		LastName:      "Thapa",
+		Address:       "Dillibazar",
+		DOB:           "1992-3-23",
+		Email:         "",
+		Gender:        "Male",
+		ContactNumber: "9832899483",
+		JoinDate:      "2073-4-31",
+		Salary:        23000,
+		Positions:     []models.Position{position},
 	}
 
 	employee2 := models.Employee{
-		ID:        0134,
-		FirstName: "Shiva",
-		LastName:  "Thapa",
-		Address:   "Bagbazar",
-		DOB:       "1994-3-23",
-		Email:     "",
-		Gender:    "Male",
-		Phone:     9832379483,
-		Photo:     "",
-		JoinDate:  "2071-3-31",
-		Salary:    20000,
+		FirstName:     "Shiva",
+		LastName:      "Thapa",
+		Address:       "Bagbazar",
+		DOB:           "1994-3-23",
+		Email:         "",
+		Gender:        "Male",
+		ContactNumber: "9832379483",
+		JoinDate:      "2071-3-31",
+		Salary:        20000,
 	}
 	leave := models.Leave{
-		ID:         001,
 		EmployeeID: employee2.ID,
 		Status:     true,
 
@@ -122,32 +117,45 @@ func main() {
 	}
 
 	vat := models.VAT{
-		ID:    01,
 		Value: 0.13,
+		Name:  "Value Added Tax",
 	}
 
 	bill := models.Bill{
-		CreatedAt:   time.Now(),
-		Delivery:    false,
-		EmployeeID:  employee1.ID,
-		CustomerID:  customer1.ID,
-		ServiceChID: serviceCh.ID,
-		ItemOrders:  []models.ItemOrder{itemOrder},
-		Payments:    []models.Payment{payment},
-		TableID:     table1.TableNo,
-	}
-	db.Model(&bill)
-	// db.CreateTable(&position)
-	// db.CreateTable(&leave)
-	// db.CreateTable(&customer1)
-	// db.CreateTable(&payment)
-	// db.CreateTable(&serviceCh)
-	// db.CreateTable(&membership)
-	// db.CreateTable(&table1)
-	// db.CreateTable(&item1)
-	// db.CreateTable(&itemCategory1)
-	// db.CreateTable(&itemOrder)
-	// db.CreateTable(&bill)
-	// db.CreateTable(&vat)
+		CreatedAt: time.Now(),
+		Delivery:  false,
+		Employee:  employee1,
+		ServiceCh: serviceCh,
 
+		ItemOrders: []models.ItemOrder{itemOrder},
+		Payments:   []models.Payment{payment},
+		Table:      table1,
+		VAT:        vat,
+	}
+
+	db.Create(&bill)
+
+	err = db.Table("employees").Create(&employee2).Error
+	checkError(err)
+
+	err = db.Table("customers").Create(&customer1).Error
+	checkError(err)
+
+	err = db.Table("customers").Create(&employee2).Error
+	checkError(err)
+
+	db.Where("id= ?", 1).First(&employee2)
+	err = db.Table("leaves").Create(&leave).Update("EmployeeID", employee2.ID).Error
+	checkError(err)
+
+	db.Where("id= ?", 1).First(&customer1)
+	err = db.Model(&bill).Update("customer_id", customer1.ID).Error
+	checkError(err)
+
+}
+
+func checkError(e error) {
+	if e != nil {
+		fmt.Println(e)
+	}
 }

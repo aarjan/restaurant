@@ -8,8 +8,8 @@ type Item struct {
 	ItemCategory   ItemCategory
 	ItemCategoryID uint
 
-	Name        string
-	UnitPrice   int
-	ItemPhoto   string
-	Description string
+	Name         string  `sql:"unique;not null"`
+	UnitPrice    float64 `sql:"not null"`
+	ItemPhotoURI string  `sql:"default:'Image Not Available'"`
+	Description  string  `sql:"default:'No Description Available'"`
 }

@@ -5,7 +5,7 @@ import "time"
 // Bill ...
 type Bill struct {
 	ID        uint
-	CreatedAt time.Time
+	CreatedAt time.Time `sql:"default:NOW()"`
 	UpdatedAt time.Time
 	// One-one relationships
 	// It embeds all the field of the respective tables including id
@@ -31,7 +31,7 @@ type Bill struct {
 	// One-to-many relationships
 	CustomerID uint
 
-	Delivery   bool `gorm:"default:false"`
-	TotalPrice float64
-	Notes      string
+	Delivery    bool    `gorm:"default:false"`
+	TotalPrice  float64 `sql:"not null"`
+	Description string  `sql:"default:'Description Not Available'"`
 }
